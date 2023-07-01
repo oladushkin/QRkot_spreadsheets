@@ -39,9 +39,10 @@
 `. venv/Scripts/activate`
 4. Установка зависимостей.
 `pip install -r requirements.txt`
-5. Создание БД.
+5. Заполнить переменные окружения (env.example).
+6. Создание БД.
 `alembic upgrade head`
-6. Запуск приложения.
+7. Запуск приложения.
 `uvicorn app.main:app `
 ---
 
