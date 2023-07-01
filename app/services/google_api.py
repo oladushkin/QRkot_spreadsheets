@@ -5,14 +5,14 @@ from datetime import datetime
 from aiogoogle import Aiogoogle
 # В секретах лежит адрес вашего личного google-аккаунта
 from app.core.config import settings
-
+from app.services.constants import FORMAT_DATE, SHEETS_SERVICE, DRIVE_SERVICE
 # Константа с форматом строкового представления времени
-FORMAT = "%Y/%m/%d %H:%M:%S"
+FORMAT_DATE = "%Y/%m/%d %H:%M:%S"
 
 
 async def spreadsheets_create(wrapper_services: Aiogoogle) -> str:
-    now_date_time = datetime.now().strftime(FORMAT)
-    service = await wrapper_services.discover('sheets', 'v4')
+    now_date_time = datetime.now().strftime(FORMAT_DATE)
+    service = await wrapper_services.discover(SHEETS_SERVICE)
     spreadsheet_body = {
         'properties': {'title': f'Отчет от {now_date_time}',
                        'locale': 'ru_RU'},
@@ -36,7 +36,7 @@ async def set_user_permissions(
     permissions_body = {'type': 'user',
                         'role': 'writer',
                         'emailAddress': settings.email}
-    service = await wrapper_services.discover('drive', 'v3')
+    service = await wrapper_services.discover(DRIVE_SERVICE)
     await wrapper_services.as_service_account(
         service.permissions.create(
             fileId=spreadsheetid,
@@ -50,8 +50,8 @@ async def spreadsheets_update_value(
         close_project: list,
         wrapper_services: Aiogoogle
 ) -> None:
-    now_date_time = datetime.now().strftime(FORMAT)
-    service = await wrapper_services.discover('sheets', 'v4')
+    now_date_time = datetime.now().strftime(FORMAT_DATE)
+    service = await wrapper_services.discover(SHEETS_SERVICE)
     table_values = [
         ['Отчет от', now_date_time],
         ['Топ проектов по скорости закрытия'],
